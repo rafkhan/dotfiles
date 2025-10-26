@@ -1,3 +1,6 @@
 [submodule "gruvbox-material-ghostty"]
 	path = gruvbox-material-ghostty
 	url = git@github.com:vlanx/gruvbox-material-ghostty.git
+[submodule "nvim"]
+	path = nvim
+	url = https://github.com/rafkhan/kickstart.nvim
