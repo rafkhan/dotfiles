@@ -96,3 +96,5 @@ alias nconf="cd ~/.config/nvim"
 
 alias gll="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 
+
+export PATH="$HOME/.local/bin:$PATH"
