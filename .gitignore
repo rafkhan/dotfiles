@@ -1,0 +1,10 @@
+# API Keys and Secrets
+.env
+.env.local
+.anthropic_key
+
+# macOS
+.DS_Store
+
+# Backup files
+*.backup

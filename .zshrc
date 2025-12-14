@@ -52,9 +52,9 @@ alias n='nvim'
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 
 BINGO_DIR="~/Developer/okay/bingo"
-alias bn="bash ~/Developer/okay/bingo/scripts/dev.sh"
+alias bn="bash $BINGO_DIR/scripts/dev.sh"
 alias bnn="bn --no-compile"
-alias bnv="bash ~/Developer/okay/bingo/scripts/build-vst3-debug.sh && ~/Developer/okay/bingo/scripts/install-vst3.sh Debug"
+alias bnv="bash $BINGO_DIR/scripts/build-vst3-debug.sh && $BINGO_DIR/scripts/install-vst3.sh Debug"
 
 # Custom Claude Code launcher with sprout emoji
 claude_with_banner() {
@@ -68,10 +68,6 @@ alias c='clod'
 
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
 alias ok='~/Developer/okay'
-
-bindkey -v
-bindkey ^R history-incremental-search-backward
-bindkey ^S history-incremental-search-forward
 
 # Vim mode indicators
 function zle-keymap-select {
@@ -92,9 +88,19 @@ function zle-line-init {
 zle -N zle-keymap-select
 zle -N zle-line-init
 
-alias nconf="cd ~/.config/nvim"
-
-alias gll="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
-
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Load Anthropic API key if it exists (for avante.nvim and other AI tools)
+# Create this file from .anthropic_key.template in your dotfiles directory
+if [ -f "$HOME/Developer/dotfiles/.anthropic_key" ]; then
+  source "$HOME/Developer/dotfiles/.anthropic_key"
+fi
+
+
+bindkey -v
+bindkey ^R history-incremental-search-backward
+bindkey ^S history-incremental-search-forward
+alias nconf="cd ~/.config/nvim"
+alias gll="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+alias dotf="cd ~/Developer/dotfiles"
