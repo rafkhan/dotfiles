@@ -2,6 +2,7 @@
 .env
 .env.local
 .anthropic_key
+.gh_token
 
 # macOS
 .DS_Store

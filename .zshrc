@@ -56,15 +56,15 @@ alias bn="bash $BINGO_DIR/scripts/dev.sh"
 alias bnn="bn --no-compile"
 alias bnv="bash $BINGO_DIR/scripts/build-vst3-debug.sh && $BINGO_DIR/scripts/install-vst3.sh Debug"
 
-# Custom Claude Code launcher with sprout emoji
-claude_with_banner() {
-  printf '\033[2J\033[H    🌱'
-  /Users/raf/.claude/local/claude "$@"
-}
-
-alias claude="claude_with_banner"
+# # Custom Claude Code launcher with sprout emoji
+# claude_with_banner() {
+#   printf '\033[2J\033[H    🌱'
+#   /Users/raf/.local/bin/claude "$@"
+# }
+#
+# alias claude="claude_with_banner"
 alias clod="claude"
-alias c='clod'
+alias c="claude"
 
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
 alias ok='~/Developer/okay'
@@ -104,3 +104,11 @@ bindkey ^S history-incremental-search-forward
 alias nconf="cd ~/.config/nvim"
 alias gll="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 alias dotf="cd ~/Developer/dotfiles"
+
+export PATH="$HOME/go/bin:$PATH"
+# Load GitHub token if it exists
+if [ -f "$HOME/Developer/dotfiles/.gh_token" ]; then
+  source "$HOME/Developer/dotfiles/.gh_token"
+fi
+
+alias fixss='cd ~/Desktop && for f in Screenshot*.png; do magick "$f" -depth 8 -define png:color-type=2 "$f"; done'
