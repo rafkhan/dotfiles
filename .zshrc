@@ -65,9 +65,11 @@ alias bnv="bash $BINGO_DIR/scripts/build-vst3-debug.sh && $BINGO_DIR/scripts/ins
 # alias claude="claude_with_banner"
 alias clod="claude"
 alias c="claude"
+alias cdanger="claude --dangerously-skip-permissions"
 
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
-alias ok='~/Developer/okay'
+alias ok='cd ~/Developer/okay'
+alias hub='cd ~/Developer/okay/hub'
 
 # Vim mode indicators
 function zle-keymap-select {
@@ -107,8 +109,14 @@ alias dotf="cd ~/Developer/dotfiles"
 
 export PATH="$HOME/go/bin:$PATH"
 # Load GitHub token if it exists
-if [ -f "$HOME/Developer/dotfiles/.gh_token" ]; then
-  source "$HOME/Developer/dotfiles/.gh_token"
-fi
 
 alias fixss='cd ~/Desktop && for f in Screenshot*.png; do magick "$f" -depth 8 -define png:color-type=2 "$f"; done'
+
+# export CLAUDE_CODE_EFFORT_LEVEL=high
+
+alias claude-mem='bun "/Users/raf/.claude/plugins/cache/thedotmack/claude-mem/10.5.5/scripts/worker-service.cjs"'
+
+# opencode
+export PATH=/Users/raf/.opencode/bin:$PATH
+
+export OLLAMA_API_KEY="ollama"
