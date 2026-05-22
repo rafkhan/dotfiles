@@ -5,6 +5,27 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+if [[ -n "$CLAUDECODE" ]]; then
+  # Inside Claude Code: plain ASCII prompt, no colors, no git status,
+  # so escape codes don't leak into tool output.
+  PROMPT='%~ %# '
+  RPROMPT=''
+else
+  # Obvious, text-label git prompt (no emojis — they break width calculation
+  # and wrap the line in some terminals).
+  ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[red]%}"
+  ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+  ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%} [dirty]"
+  ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} [untracked]"
+  ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%} [clean]"
+  ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[cyan]%} [added]"
+  ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%} [modified]"
+  ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} [deleted]"
+  ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%} [renamed]"
+  ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%} [conflict]"
+  ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[blue]%} [ahead]"
+fi
+
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -51,7 +72,7 @@ alias n='nvim'
 # Shopify Hydrogen alias to local projects
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 
-BINGO_DIR="~/Developer/okay/bingo"
+BINGO_DIR="~/Developer/okay/hub/bingo"
 alias bn="bash $BINGO_DIR/scripts/dev.sh"
 alias bnn="bn --no-compile"
 alias bnv="bash $BINGO_DIR/scripts/build-vst3-debug.sh && $BINGO_DIR/scripts/install-vst3.sh Debug"
@@ -71,24 +92,26 @@ export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
 alias ok='cd ~/Developer/okay'
 alias hub='cd ~/Developer/okay/hub'
 
-# Vim mode indicators
-function zle-keymap-select {
-  VIM_NORMAL="%{$fg_bold[yellow]%} [NORMAL] %{$reset_color%}"
-  VIM_INSERT="%{$fg_bold[green]%} [INSERT] %{$reset_color%}"
-  RPS1="${${KEYMAP/vicmd/$VIM_NORMAL}/(main|viins)/$VIM_INSERT}"
-  RPS1="$RPS1 "'${time} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}$(git_prompt_ahead)%{$reset_color%}'
-  zle reset-prompt
-}
+# Vim mode indicators (skip inside Claude Code to keep its prompt clean)
+if [[ -z "$CLAUDECODE" ]]; then
+  function zle-keymap-select {
+    VIM_NORMAL="%{$fg_bold[yellow]%} [NORMAL] %{$reset_color%}"
+    VIM_INSERT="%{$fg_bold[green]%} [INSERT] %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_NORMAL}/(main|viins)/$VIM_INSERT}"
+    RPS1="$RPS1 "'${time} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}$(git_prompt_ahead)%{$reset_color%}'
+    zle reset-prompt
+  }
 
-function zle-line-init {
-  VIM_INSERT="%{$fg_bold[green]%} [INSERT] %{$reset_color%}"
-  RPS1="$VIM_INSERT"
-  RPS1="$RPS1 "'${time} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}$(git_prompt_ahead)%{$reset_color%}'
-  zle reset-prompt
-}
+  function zle-line-init {
+    VIM_INSERT="%{$fg_bold[green]%} [INSERT] %{$reset_color%}"
+    RPS1="$VIM_INSERT"
+    RPS1="$RPS1 "'${time} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}$(git_prompt_status)%{$reset_color%}$(git_prompt_ahead)%{$reset_color%}'
+    zle reset-prompt
+  }
 
-zle -N zle-keymap-select
-zle -N zle-line-init
+  zle -N zle-keymap-select
+  zle -N zle-line-init
+fi
 
 
 export PATH="$HOME/.local/bin:$PATH"
@@ -120,3 +143,12 @@ alias claude-mem='bun "/Users/raf/.claude/plugins/cache/thedotmack/claude-mem/10
 export PATH=/Users/raf/.opencode/bin:$PATH
 
 export OLLAMA_API_KEY="ollama"
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+alias retardmode="claude --dangerously-skip-permissions"
+
+
+
