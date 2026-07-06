@@ -72,7 +72,7 @@ alias n='nvim'
 # Shopify Hydrogen alias to local projects
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 
-BINGO_DIR="~/Developer/okay/hub/bingo"
+BINGO_DIR="~/Developer/okay/bingo"
 alias bn="bash $BINGO_DIR/scripts/dev.sh"
 alias bnn="bn --no-compile"
 alias bnv="bash $BINGO_DIR/scripts/build-vst3-debug.sh && $BINGO_DIR/scripts/install-vst3.sh Debug"
