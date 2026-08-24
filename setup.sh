@@ -3,7 +3,7 @@
 # Dotfiles setup script
 # This script creates symlinks from home directory to dotfiles directory
 
-DOTFILES_DIR="$HOME/Developer/dotfiles"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Colors for output
 RED='\033[0;31m'
@@ -55,6 +55,26 @@ safe_link() {
 echo -e "${BLUE}Linking dotfiles...${NC}"
 safe_link "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 safe_link "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+
+# Ghostty has no Windows build, so the theme is only useful on macOS/Linux
+# desktops -- skip it under WSL rather than littering ~/.config.
+IS_WSL=0
+[ -r /proc/version ] && grep -qi microsoft /proc/version && IS_WSL=1
+if [ "$IS_WSL" -eq 0 ]; then
+    echo -e "\n${BLUE}Linking Ghostty theme...${NC}"
+    safe_link "$DOTFILES_DIR/gruvbox-material-ghostty/themes" "$HOME/.config/ghostty/themes"
+else
+    echo -e "\n${YELLOW}! Skipping Ghostty theme (not available on Windows/WSL)${NC}"
+fi
+
+# Debian/Ubuntu ship fd as `fdfind`. Telescope and friends exec the `fd` binary
+# directly, so a shell alias is not enough -- shim it onto PATH.
+if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
+    echo -e "\n${BLUE}Shimming fd -> fdfind...${NC}"
+    mkdir -p "$HOME/.local/bin"
+    ln -sfn "$(command -v fdfind)" "$HOME/.local/bin/fd"
+    echo -e "${GREEN}✓ Linked: $HOME/.local/bin/fd → $(command -v fdfind)${NC}"
+fi
 
 echo -e "\n${GREEN}Setup complete!${NC}"
 echo -e "\n${BLUE}Next steps:${NC}"
