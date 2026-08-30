@@ -142,7 +142,7 @@ alias n='nvim'
 # Shopify Hydrogen alias to local projects
 alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
 
-BINGO_DIR="$HOME/Developer/okay/bingo"
+BINGO_DIR="$HOME/Developer/okay/hub/bingo"
 alias bn="bash $BINGO_DIR/scripts/dev.sh"
 alias bnn="bn --no-compile"
 alias bnv="bash $BINGO_DIR/scripts/build-vst3-debug.sh && $BINGO_DIR/scripts/install-vst3.sh Debug"
@@ -229,6 +229,9 @@ if [[ -n "$IS_WSL" ]]; then
   # `open .` opens the current directory in Windows Explorer, like macOS `open`.
   alias open='explorer.exe'
 fi
+
+# sentry CLI completions
+fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
 
 # ---------------------------------------------------------------------------
 # Machine-local overrides — not tracked in git, safe for per-machine secrets
